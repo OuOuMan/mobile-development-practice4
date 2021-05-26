@@ -1,0 +1,34 @@
+package ru.mirea.miroshnichenko.looper;
+
+import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+
+
+public class MyLooper extends Thread {
+    private int number = 0;
+    Handler handler;
+    @SuppressLint("HandlerLeak")
+    @Override
+    public void run(){
+        Log.d("MyLooper", "run");
+        Looper.prepare();
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg){
+                String myProfession = msg.getData().getString("profession");
+                String myAgeStr = msg.getData().getString("age");
+                int myAge = Integer.parseInt(myAgeStr);
+                try {
+                    Thread.sleep(myAge);
+                } catch (Exception e) {
+                }
+                Log.d("MyLooper", "Profession: " + myProfession + " Age: " + myAgeStr);
+                number++;
+            }
+        };
+        Looper.loop();
+    }
+}
